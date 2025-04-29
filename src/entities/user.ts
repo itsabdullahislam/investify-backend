@@ -30,9 +30,7 @@ import {
   
       @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   registration_date!: Date;
-  
-    @Column({ type: 'varchar', length: 255, nullable: true })
-      profile_picture!: string;
+
   
     @Column({ type: 'varchar', length: 20, default: 'Active' })
       status!: UserStatus;
