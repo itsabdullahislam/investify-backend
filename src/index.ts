@@ -5,6 +5,8 @@ import { AppDataSource } from './config/data-source'; // Import AppDataSource
 import authRoutes from './routes/auth.routes';
 import campaignRoutes from './routes/campaign.routes';
 import cors from 'cors';
+import investorRoutes from './routes/investor.routes';
+import path from 'path';
 
 dotenv.config();
 
@@ -24,6 +26,9 @@ AppDataSource.initialize()
     }));
     
     // Register routes
+    
+    app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+    app.use('/api', investorRoutes);
     app.use('/api/auth', authRoutes);
     app.use('/api/campaigns', campaignRoutes);
     // Start the server

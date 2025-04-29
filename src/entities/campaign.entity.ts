@@ -24,11 +24,9 @@ export class Campaign {
   @Column({ type: 'decimal', precision: 12, scale: 2, default: 0 })
   current_funding_raised!: number;
 
-  @Column({ type: 'timestamp' })
-  start_date!: Date;
 
   @Column({ type: 'timestamp' })
-  end_date!: Date;
+  published_date!: Date;
 
   @Column({ type: 'varchar', length: 20, default: 'active' })
   status!: string;

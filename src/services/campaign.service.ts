@@ -8,9 +8,8 @@ export const createCampaignService = async (
   title: string, 
   description: string, 
   target_funding_goal: number, 
-  start_date: Date, 
-  end_date: Date, 
-  funding_type: string, 
+  published_date: Date, 
+  funding_type: string | null, 
   demo_url: string | null, 
   video: string | null, 
   image: string | null, 
@@ -19,6 +18,8 @@ export const createCampaignService = async (
 ) => {
   const campaignRepo = AppDataSource.getRepository(Campaign);
   const userRepo = AppDataSource.getRepository(User);
+ 
+
 
   try {
     // 1. Find user
@@ -37,10 +38,9 @@ export const createCampaignService = async (
     campaign.description = description;
     campaign.target_funding_goal = target_funding_goal;
     campaign.current_funding_raised = 0;
-    campaign.start_date = start_date;
-    campaign.end_date = end_date;
+    campaign.published_date = published_date;
     campaign.status = 'pending'; // Initially pending
-    campaign.funding_type = funding_type || 'crowdfunding equity';
+    campaign.funding_type = funding_type || 'equity';
     campaign.demo_url = demo_url || null;
     campaign.video = video || null;
     campaign.image = image || null;
@@ -85,5 +85,22 @@ export const createCampaignService = async (
   } catch (error) {
     console.error('Service Error creating campaign:', (error as Error).message);
     throw error; // throw original error, not custom string
+  }
+};
+
+
+export const getAllCampaignsService = async () => {
+  const campaignRepo = AppDataSource.getRepository(Campaign);
+
+  try {
+    const campaigns = await campaignRepo.find({
+      relations: ['innovator'], // include user data if needed
+      order: { published_date: 'DESC' },
+    });
+
+    return campaigns;
+  } catch (error) {
+    console.error('Error fetching campaigns:', (error as Error).message);
+    throw error;
   }
 };
