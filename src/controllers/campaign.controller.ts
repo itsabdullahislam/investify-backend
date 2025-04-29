@@ -21,8 +21,9 @@ export const createCampaignController: RequestHandler = async (req, res, next) =
     
 
     // Extract uploaded file paths if available
-    const image = req.files?.['image']?.[0]?.path || null;
-    const video = req.files?.['video']?.[0]?.path || null;
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
+    const image = files?.['image']?.[0]?.path || null;
+    const video = (files?.['video']?.[0]?.path) || null;
 
     const campaign = await createCampaignService(
       Number(user_id),
