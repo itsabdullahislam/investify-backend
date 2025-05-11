@@ -29,6 +29,9 @@ import { Campaign } from './campaign.entity';
   
     @Column({ type: 'decimal', precision: 12, scale: 2, default: 0 })
     funds_raised!: number;
+   
+    @Column({ type: 'integer',  default: 0 })
+    campaigns_count!: number;
   
     @Column({ type: 'varchar', length: 255, nullable: true })
     profile_picture?: string | null;

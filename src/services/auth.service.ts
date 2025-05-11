@@ -33,7 +33,7 @@ export class AuthService {
         company_name: '',
         company_description: '',
         profile_picture: null,
-        interest: '',
+        interest: [],
         total_investment: 0,
       });
       await investorRepo.save(investor);
@@ -59,13 +59,22 @@ export class AuthService {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw new Error('Invalid credentials');
 
+    let isFirstTime = false;
+
+    if( user.role == "investor" ) {
+    const investor = await investorRepo.findOne({ where: { investor_id: user.user_id } });
+    if (investor && (!investor.interest || investor.interest.length === 0)) {
+      isFirstTime = true;
+    }
+    }
     return {
         token: generateToken({ id: user.user_id, role: user.role }),
         user: {
           id: user.user_id,
           name: user.name,
           email: user.email,
-          role: user.role
+          role: user.role,
+          isFirstTime,
         }
       }
       ;

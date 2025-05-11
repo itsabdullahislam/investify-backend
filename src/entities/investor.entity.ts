@@ -27,8 +27,9 @@ import { Investment } from './investment';
     @Column({ type: 'varchar', length: 255, nullable: true })
     profile_picture?: string | null;
   
-    @Column({ type: 'text', nullable: true })
-    interest!: string;
+    @Column("text", { array: true, nullable: true })
+    interest!: string[];
+    
   
     @Column({ type: 'decimal', precision: 12, scale: 2, default: 0 })
     total_investment!: number;

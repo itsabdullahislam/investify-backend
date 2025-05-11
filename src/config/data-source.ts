@@ -4,6 +4,8 @@ import { Campaign } from '../entities/campaign.entity';
 import { Innovator } from '../entities/innovator.entity';
 import { Investment } from '../entities/investment';
 import { Investor } from '../entities/investor.entity';
+import { Like } from "../entities/like.entity"; // Adjust path if necessary
+
 
 export const AppDataSource = new DataSource({
   type: 'postgres', 
@@ -14,7 +16,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME || 'investify',
   synchronize: true, 
   logging: true,
-  entities: [User, Campaign , Investor , Innovator , Investment], 
+  entities: [User, Campaign , Investor , Innovator , Investment , Like], 
   migrations: [],
   subscribers: [],
 });

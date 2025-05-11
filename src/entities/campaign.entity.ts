@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { User } from './user'; // Import User entity
 import { Investment } from './investment';
+import { Innovator } from './innovator.entity';
+import { Like } from './like.entity';
 
 
 @Entity('campaigns')
@@ -8,9 +10,9 @@ export class Campaign {
   @PrimaryGeneratedColumn()
   campaign_id!: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => Innovator, (innovator) => innovator.campaigns)
   @JoinColumn({ name: 'innovator_id' })
-  innovator!: User;
+  innovator!: Innovator;
 
   @Column({ type: 'varchar', length: 255 })
   title!: string;
@@ -45,13 +47,19 @@ export class Campaign {
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   image?: string | null;
+  
+  @Column("text", { array: true, nullable: true })
+  docs?: string[];
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   equity_offered?: number | null; 
 
-  @Column({ type: 'int', default: 0 })
-  likes!: number; 
+  @OneToMany(() => Like, like => like.campaign)
+  likes!: Like[];
+
 
   @OneToMany(() => Investment, (investment) => investment.campaign)
   investments!: Investment[];
+  campaign!: User;
+    id: any;
 }

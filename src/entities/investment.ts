@@ -11,7 +11,7 @@ import { Investor } from './investor.entity';
 import { Campaign } from './campaign.entity';
 
 @Entity('investments')
-export class Investment {
+ export class Investment {
   @PrimaryGeneratedColumn()
   investment_id!: number;
 

@@ -3,7 +3,13 @@ import {
     PrimaryGeneratedColumn,
     Column,
     CreateDateColumn,
+    OneToOne,
+    OneToMany,
+    JoinColumn,
   } from 'typeorm';
+import { Investor } from './investor.entity';
+import { Innovator } from './innovator.entity';
+import { Like } from './like.entity';
   
   export type UserRole = 'innovator' | 'investor' | 'admin';
   export type UserStatus = 'Active' | 'Inactive' | 'Suspended'; // can be extended later
@@ -34,5 +40,17 @@ import {
   
     @Column({ type: 'varchar', length: 20, default: 'Active' })
       status!: UserStatus;
+
+    @OneToMany(() => Like, (like: { user: any; }) => like.user)
+    likes!: Like[];
+
+
+    @OneToOne(() => Innovator, (innovator) => innovator.user)
+    @JoinColumn({ name: 'innovator_id'})
+      innovator!: Innovator;
+    
+     
+    @OneToOne(() => Investor, (investor: { user: any; }) => investor.user)
+      investor?: Investor;
   }
   
