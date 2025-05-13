@@ -3,6 +3,7 @@ import { Innovator } from "../entities/innovator.entity";
 import { Investment } from "../entities/investment";
 import moment from "moment";
 import { Investor } from "../entities/investor.entity";
+import { Campaign } from "../entities/campaign.entity";
 
 export class InvestmentService {
   static async getMonthlyInvestmentsByInnovator(userId: number) {
@@ -143,7 +144,33 @@ export class InvestmentService {
 
   // Extract the campaigns
   const campaigns = investments.map((inv) => inv.campaign);
+  
 
   return campaigns;
+  }
+
+
+
+  static async investInCampaign(userId: number, campaignId: number){
+    const investorRepo = AppDataSource.getRepository(Investor);
+    const campaignRepo = AppDataSource.getRepository(Campaign);
+    const investmentRepo = AppDataSource.getRepository(Investment);
+
+    // Find investor using user ID
+    const investor = await investorRepo.findOne({ where: { user: { user_id: userId } } });
+    if (!investor) throw new Error("Investor not found.");
+
+    // Find campaign
+    const campaign = await campaignRepo.findOne({ where: { campaign_id: campaignId } });
+    if (!campaign) throw new Error("Campaign not found.");
+
+    // Create investment
+    const newInvestment = investmentRepo.create({
+      investor,
+      campaign,
+      amount: campaign.target_funding_goal
+    });
+
+    return await investmentRepo.save(newInvestment);
   }
 }

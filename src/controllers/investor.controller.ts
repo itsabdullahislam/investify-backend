@@ -114,4 +114,32 @@ try {
 
 
 }
+
+
+ static async getMonthlyInvestments(req: Request, res: Response) {
+    try {
+      const userId = parseInt(req.params.userId);
+      const monthlyData = await InvestorService.getInvestorStats(userId);
+      res.status(200).json({ success: true, Mdata: monthlyData });
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Failed to fetch investment data", error });
+    }
+  }
+
+
+  static async getInvestorCampaignInvestments(req: Request, res: Response) {
+  const userId = parseInt(req.params.userId);
+  if (isNaN(userId)) {
+    res.status(400).json({ message: "Invalid user ID" });
+  }
+
+  try {
+    const data = await InvestorService.getInvestorCampaignInvestments(userId);
+    res.status(200).json({ success: true, data });
+  } catch (error: any) {
+    console.error("Error in getInvestorCampaignInvestments:", error.message || error);
+    res.status(500).json({ success: false, message: "Internal server error", error: error.message || error });
+  }
+}
+
 }

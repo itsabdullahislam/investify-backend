@@ -12,5 +12,7 @@ router.put("/investor/:id/profile-picture", upload.single("profile_picture"), In
 router.put('/investor/:user_id/profile/update', InvestorController.updateInvestorProfileInfo);
 router.get("/investor/ranked", InvestorController.getRankedInvestors);
 router.get("/investor/:user_id/feed",  InvestorController.getInvestorInterestCampaigns);
+router.get("/investor/:userId/monthly", InvestorController.getMonthlyInvestments);
+router.get("/campaign-investments/:userId", InvestorController.getInvestorCampaignInvestments);
 
 export default router;

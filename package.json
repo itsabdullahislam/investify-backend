@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts"
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "typeorm": "typeorm"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,8 @@
     "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.7",
     "sequelize-typescript": "^2.1.6",
+    "socket": "^0.15.0",
+    "socket.io": "^4.8.1",
     "typeorm": "^0.3.22"
   },
   "devDependencies": {
@@ -34,6 +37,7 @@
     "@types/moment": "^2.13.0",
     "@types/multer": "^1.4.12",
     "@types/node": "^22.14.0",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
   }

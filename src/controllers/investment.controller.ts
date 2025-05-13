@@ -29,4 +29,22 @@ export class InvestmentController {
   }
   
   }
+
+
+  static async investInCampaign(req: Request, res: Response) {
+    try {
+    const userId = req.params.user_id; 
+    const { campaign_id } = req.body;
+
+    if (!campaign_id) {
+       res.status(400).json({ message: "Campaign ID is required." });
+    }
+
+    const result = await InvestmentService.investInCampaign(Number(userId), campaign_id);
+    res.status(201).json({ message: "Investment successful", investment: result });
+  } catch (error) {
+    console.error("Investment error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
 }

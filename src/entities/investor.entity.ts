@@ -36,5 +36,6 @@ import { Investment } from './investment';
 
     @OneToMany(() => Investment, (investment) => investment.investor)
   investments!: Investment[];
+    interests: any;
   }
   

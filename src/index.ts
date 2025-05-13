@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import express from 'express';
 import dotenv from 'dotenv';
 import { AppDataSource } from './config/data-source'; 
+import http from 'http';
 import authRoutes from './routes/auth.routes';
 import campaignRoutes from './routes/campaign.routes';
 import cors from 'cors';
@@ -11,12 +12,20 @@ import innovatorRoutes from './routes/innovator.routes';
 import Likeroutes from './routes/like.routes'; 
 import investmentroutes from './routes/investment.routes'; 
 import cookieParser from "cookie-parser";
-import { authMiddleware } from './middleware/auth';
+import { authenticateUser } from './middleware/auth';
+import chatRoutes from './routes/chat.routes';
+import { initSocket } from './socket/socket';
 
 
 dotenv.config();
 
+// Define the PORT variable
+const PORT = process.env.PORT || 3000;
+
+
 const app = express();
+
+
 
 
 AppDataSource.initialize()
@@ -26,6 +35,12 @@ AppDataSource.initialize()
     // Middleware to parse JSON bodies
     app.use(express.json());
 
+
+    const server =  app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+    initSocket(server);
+
     app.use(cors({
       origin: 'http://localhost:3001', // frontend URL
       credentials: true,
@@ -33,7 +48,7 @@ AppDataSource.initialize()
 
     
     app.use(cookieParser());
-    app.get('/api/me', authMiddleware, (req: express.Request, res: express.Response) => {
+    app.get('/api/me', authenticateUser, (req: express.Request, res: express.Response) => {
       if ((req as any).user) {
         res.status(200).json((req as any).user); // Ensure req.user is properly cast
       } else {
@@ -44,7 +59,7 @@ AppDataSource.initialize()
 
    app.use(cookieParser());
     // Register routes
-    
+    app.use("/api/chat", chatRoutes);
     app.use('/api/investment', investmentroutes); 
     app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
     app.use('/api', innovatorRoutes);

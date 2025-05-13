@@ -1,5 +1,5 @@
 import { AppDataSource } from '../config/data-source'; 
-import { User } from '../entities/user';
+import { User, UserRole } from '../entities/user';
 import bcrypt from 'bcrypt';
 import { generateToken } from '../utils/jwt';
 import { Innovator } from '../entities/innovator.entity';
@@ -10,8 +10,8 @@ const investorRepo = AppDataSource.getRepository(Investor);
 const innovatorRepo = AppDataSource.getRepository(Innovator);
 
 export class AuthService {
-  static async register(data: Partial<User>) {
-    const { name, email, password, role, phone_number } = data;
+  static async register(data: { name: string; email: string; password: string; role: UserRole; phoneNumber: string; }) {
+    const { name, email, password, role, phoneNumber } = data;
 
     const existing = await userRepo.findOne({ where: { email } });
     if (existing) throw new Error('Email already in use');
@@ -23,7 +23,7 @@ export class AuthService {
       email,
       password: hashedPassword,
       role,
-      phone_number,
+      phone_number: phoneNumber,
     });
 
     const savedUser = await userRepo.save(newUser);
@@ -37,8 +37,10 @@ export class AuthService {
         total_investment: 0,
       });
       await investorRepo.save(investor);
+      newUser.investor = investor;
+      await userRepo.save(newUser);
     } else if (role === 'innovator') {
-      const innovator = innovatorRepo.create({
+      const newinnovator = innovatorRepo.create({
         innovator_id: savedUser.user_id,
         company_name: '',
         company_description: '',
@@ -46,9 +48,12 @@ export class AuthService {
         industry: '',
         funds_raised: 0,
       });
-      await innovatorRepo.save(innovator);
+      const savedInnovator = await innovatorRepo.save(newinnovator);
+     newUser.innovator = savedInnovator;
+     await userRepo.save(newUser);
     }
 
+    
     return generateToken({ id: newUser.user_id, role: newUser.role });
   }
 
