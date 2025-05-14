@@ -22,4 +22,4 @@ export const authenticateUser = (req: Request, res: Response, next: NextFunction
   } catch (err) {
      res.status(401).json({ message: "Invalid token" });
   }
-};
+};  
