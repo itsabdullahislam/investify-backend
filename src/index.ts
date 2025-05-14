@@ -43,7 +43,7 @@ AppDataSource.initialize()
     initSocket(server);
 
     app.use(cors({
-      origin: 'http://localhost:3001', // frontend URL
+      origin: "*", // frontend URL
       credentials: true,
     }));
 
