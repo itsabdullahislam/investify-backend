@@ -92,8 +92,9 @@ export class InvestorController {
 };
 
 static async getRankedInvestors(req: Request, res: Response) {
+  const userId = req.user?.id;
   try {
-    const rankedInvestors = await InvestorService.getRankedInvestors();
+    const rankedInvestors = await InvestorService.getRankedInvestors(Number(userId));
      res.status(200).json(rankedInvestors);
   } catch (error) {
     console.error("Error fetching ranked investors:", error);

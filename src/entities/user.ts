@@ -53,5 +53,11 @@ import { Like } from './like.entity';
     @OneToOne(() => Investor, (investor: { user: any; }) => investor.user)
       investor?: Investor;
     innovator_id: any;
+    company_name: any;
+    id: any;
+    interests: any;
+    investments: any;
+    company_description: any;
+    campaigns: never[];
   }
   

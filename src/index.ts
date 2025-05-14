@@ -15,6 +15,7 @@ import cookieParser from "cookie-parser";
 import { authenticateUser } from './middleware/auth';
 import chatRoutes from './routes/chat.routes';
 import { initSocket } from './socket/socket';
+import searchRoutes from './routes/search.routes';
 
 
 dotenv.config();
@@ -59,6 +60,7 @@ AppDataSource.initialize()
 
    app.use(cookieParser());
     // Register routes
+    app.use('/api', searchRoutes)
     app.use("/api/chat", chatRoutes);
     app.use('/api/investment', investmentroutes); 
     app.use('/uploads', express.static(path.join(__dirname, '../uploads')));

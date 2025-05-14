@@ -164,13 +164,24 @@ export class InvestmentService {
     const campaign = await campaignRepo.findOne({ where: { campaign_id: campaignId } });
     if (!campaign) throw new Error("Campaign not found.");
 
-    // Create investment
-    const newInvestment = investmentRepo.create({
-      investor,
-      campaign,
-      amount: campaign.target_funding_goal
-    });
+   // Only allow investment if campaign is not closed
+if (campaign.isClosed) throw new Error("Campaign is already closed.");
 
-    return await investmentRepo.save(newInvestment);
+// Create investment
+const newInvestment = investmentRepo.create({
+  investor,
+  campaign,
+  amount: campaign.target_funding_goal
+});
+
+await investmentRepo.save(newInvestment);
+
+// Update campaign to mark as closed
+campaign.isClosed = true;
+campaign.closedBy = investor;
+await campaignRepo.save(campaign);
+
+return newInvestment;
+
   }
 }

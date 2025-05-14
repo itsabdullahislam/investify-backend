@@ -3,6 +3,7 @@ import { User } from './user'; // Import User entity
 import { Investment } from './investment';
 import { Innovator } from './innovator.entity';
 import { Like } from './like.entity';
+import { Investor } from './investor.entity';
 
 
 @Entity('campaigns')
@@ -57,6 +58,12 @@ export class Campaign {
   @OneToMany(() => Like, like => like.campaign)
   likes!: Like[];
 
+  // Campaign.ts
+@Column({ type: "boolean", default: false })
+isClosed!: boolean;
+
+@ManyToOne(() => Investor, { nullable: true })
+closedBy!: Investor;
 
   @OneToMany(() => Investment, (investment) => investment.campaign)
   investments!: Investment[];

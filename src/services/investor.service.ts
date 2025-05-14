@@ -5,7 +5,7 @@ import { User } from '../entities/user';
 import { Campaign } from '../entities/campaign.entity';
 import moment from 'moment';
 import { Like } from '../entities/like.entity';
-import { In } from 'typeorm';
+import { In, Not } from 'typeorm';
 import { where } from 'sequelize';
 
 interface UpdateProfileData {
@@ -115,11 +115,14 @@ export class InvestorService {
 };
   
 
-static async getRankedInvestors() {
+static async getRankedInvestors(userId: number) {
   const investmentRepo = AppDataSource.getRepository(Investment);
+  const investorRepo = AppDataSource.getRepository(Investor);
+  const campaignRepo = AppDataSource.getRepository(Campaign);
+  
 
- 
-    const result = await investmentRepo
+  // Step 1: Aggregate investment stats by investor
+  const result = await investmentRepo
     .createQueryBuilder("investment")
     .select("investment.investor_id", "investorId")
     .addSelect("COUNT(*)", "totalInvestments")
@@ -131,14 +134,26 @@ static async getRankedInvestors() {
     .addOrderBy("SUM(investment.amount)", "DESC")
     .getRawMany();
 
-  const investorRepo = AppDataSource.getRepository(Investor);
-
+  // Step 2: Enrich each investor with user data and campaign list
   const rankedInvestors = await Promise.all(
-    result.map(async (row) => {
+   
+    result
+     .filter(row => row.investorId !== userId)
+     .map(async (row) => {
       const investor = await investorRepo.findOne({
         where: { investor_id: row.investorId },
         relations: ["user"],
       });
+
+      // Fetch campaigns the investor has invested in
+      const campaigns = await investmentRepo
+        .createQueryBuilder("investment")
+        .leftJoinAndSelect("investment.campaign", "campaign")
+        .select(["campaign.campaign_id","campaign.status", "campaign.title", "campaign.description", "investment.amount", "campaign.image"])
+        .where("investment.investor_id = :investorId", { investorId: row.investorId })
+        .andWhere("campaign.status = :status", { status: "accepted" })
+        .groupBy("campaign.campaign_id, investment.amount")
+        .getRawMany();
 
       return {
         investorId: investor?.investor_id,
@@ -148,13 +163,34 @@ static async getRankedInvestors() {
         totalInvestments: Number(row.totalInvestments),
         uniqueCampaigns: Number(row.uniqueCampaigns),
         totalAmountInvested: Number(row.totalAmountInvested),
+        
+         user: {
+          companyname: investor?.company_name,
+          companydescription: investor?.company_description,
+          interest : investor?.interest,
+          id: investor?.user?.user_id,
+          name: investor?.user?.name,
+          email: investor?.user?.email,
+          profilePic: investor?.profile_picture || null,
+          number : investor?.user?.phone_number,
+          role: investor?.user?.role,
+          campaigns: campaigns.map(c => ({
+          campaignId: c.campaign_id,
+          status: c.campaign_status,
+          title: c.campaign_title,
+          image: c.campaign_image,
+          description: c.campaign_description,
+          investedAmount: Number(c.investment_amount)
+        }))
+        },
+       
       };
     })
   );
 
   return rankedInvestors;
-
 }
+
 
 
 
