@@ -1,6 +1,6 @@
 import { AppDataSource } from '../config/data-source'; 
 import { User, UserRole } from '../entities/user';
-import * as bcrypt from 'bcryptjs';
+
 import { generateToken } from '../utils/jwt';
 import { Innovator } from '../entities/innovator.entity';
 import { Investor } from '../entities/investor.entity';
@@ -16,12 +16,12 @@ export class AuthService {
     const existing = await userRepo.findOne({ where: { email } });
     if (existing) throw new Error('Email already in use');
 
-    const hashedPassword = await bcrypt.hash(password!, 10);
+    
 
     const newUser = userRepo.create({
       name,
       email,
-      password: hashedPassword,
+      password,
       role,
       phone_number: phoneNumber,
     });
@@ -61,8 +61,8 @@ export class AuthService {
     const user = await userRepo.findOne({ where: { email } });
     if (!user) throw new Error('Invalid credentials');
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) throw new Error('Invalid credentials');
+    // Compare plain password directly
+    if (password !== user.password) throw new Error('Invalid credentials')
 
     let isFirstTime = false;
 
