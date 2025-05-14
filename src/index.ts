@@ -44,7 +44,7 @@ AppDataSource.initialize()
 
     app.use(cors({
       origin: "https://nice-grass-01a8bd000.6.azurestaticapps.net", 
-      credentials : true
+      //credentials : true
     }));
 
     
