@@ -43,7 +43,7 @@ AppDataSource.initialize()
     initSocket(server);
 
     app.use(cors({
-      origin: "*", 
+      origin: "https://nice-grass-01a8bd000.6.azurestaticapps.net", 
       credentials : true
     }));
 

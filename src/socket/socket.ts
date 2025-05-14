@@ -6,7 +6,7 @@ import { ChatService } from "../services/chat.service";
 export function initSocket(server: any) {
   const io = new Server(server, {
     cors: {
-      origin:'*',
+      origin:'https://nice-grass-01a8bd000.6.azurestaticapps.net',
       credentials: true,
       methods: ["GET" , "POST"]
     }

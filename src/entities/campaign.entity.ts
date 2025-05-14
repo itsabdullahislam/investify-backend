@@ -8,6 +8,7 @@ import { Investor } from './investor.entity';
 
 @Entity('campaigns')
 export class Campaign {
+  
   @PrimaryGeneratedColumn()
   campaign_id!: number;
 

@@ -213,7 +213,7 @@ export const getTrendingCampaigns = async (): Promise<Campaign[]> => {
             c2."image",
             c2."status",
             c2."isClosed",
-            c2."closedBy"
+            c2."closedByInvestorId"
           FROM "campaigns" c2
           WHERE c2."innovator_id" = c."innovator_id"
         ) all_camps

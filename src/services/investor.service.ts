@@ -253,6 +253,8 @@ static async getInvestorInterestCampaigns(user_id: number) {
       image: campaign.image,
       docs: campaign.docs,
       equity_offered: campaign.equity_offered,
+      isclosed: campaign.isClosed,
+      closedby: campaign.closedBy,
       innovator: {
         innovator_id: innovator.innovator_id,
         company_name: innovator.company_name,
