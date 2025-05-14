@@ -34,13 +34,18 @@ export class InvestmentController {
   static async investInCampaign(req: Request, res: Response) {
     try {
     const userId = req.params.user_id; 
-    const { campaign_id } = req.body;
+    const { campaignId } = req.body;
+    console.log("req.body:", req.body); // 👉 Check what's actually coming in
 
-    if (!campaign_id) {
+
+    console.log("ids", campaignId,userId);
+
+    if (!campaignId) {
        res.status(400).json({ message: "Campaign ID is required." });
+       return;
     }
 
-    const result = await InvestmentService.investInCampaign(Number(userId), campaign_id);
+    const result = await InvestmentService.investInCampaign(Number(userId), campaignId);
     res.status(201).json({ message: "Investment successful", investment: result });
   } catch (error) {
     console.error("Investment error:", error);

@@ -10,6 +10,7 @@ import {
 import { Investor } from './investor.entity';
 import { Innovator } from './innovator.entity';
 import { Like } from './like.entity';
+import { Notification } from './notification.entity';
   
   export type UserRole = 'innovator' | 'investor' | 'admin';
   export type UserStatus = 'Active' | 'Inactive' | 'Suspended'; // can be extended later
@@ -59,5 +60,11 @@ import { Like } from './like.entity';
     investments: any;
     company_description: any;
     campaigns: never[] | undefined;
+    
+
+
+    @OneToMany(() => Notification, (notification) => notification.recipient)
+    notifications!: Notification[];
+
   }
   
