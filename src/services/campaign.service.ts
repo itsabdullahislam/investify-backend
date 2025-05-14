@@ -144,6 +144,8 @@ export const getAllCampaignsService = async () => {
           description: campaign.description,
           target_funding_goal: campaign.target_funding_goal,
           status: campaign.status,
+          isclosed: campaign.isClosed,
+          closedby: campaign.closedBy,
         })),
       };
     }));
@@ -209,7 +211,9 @@ export const getTrendingCampaigns = async (): Promise<Campaign[]> => {
             c2."description",
             c2."target_funding_goal",
             c2."image",
-            c2."status"
+            c2."status",
+            c2."isClosed",
+            c2."closedBy"
           FROM "campaigns" c2
           WHERE c2."innovator_id" = c."innovator_id"
         ) all_camps
