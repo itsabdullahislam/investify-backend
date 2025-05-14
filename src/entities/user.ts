@@ -58,6 +58,6 @@ import { Like } from './like.entity';
     interests: any;
     investments: any;
     company_description: any;
-    campaigns: never[];
+    campaigns: never[] | undefined;
   }
   
