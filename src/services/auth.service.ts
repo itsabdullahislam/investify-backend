@@ -1,6 +1,6 @@
 import { AppDataSource } from '../config/data-source'; 
 import { User, UserRole } from '../entities/user';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { generateToken } from '../utils/jwt';
 import { Innovator } from '../entities/innovator.entity';
 import { Investor } from '../entities/investor.entity';
