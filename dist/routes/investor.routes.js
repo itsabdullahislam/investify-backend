@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const investor_controller_1 = require("../controllers/investor.controller");
+const upload_middleware_1 = require("../middleware/upload.middleware");
+const auth_1 = require("../middleware/auth");
+const router = (0, express_1.Router)();
+router.post("/investor/interests", investor_controller_1.InvestorController.setInterest);
+router.get("/investor/:user_id/profile", investor_controller_1.InvestorController.getInvestorProfile);
+router.put("/investor/:id/profile-picture", upload_middleware_1.upload.single("profile_picture"), investor_controller_1.InvestorController.updateProfilePicture);
+router.put('/investor/:user_id/profile/update', investor_controller_1.InvestorController.updateInvestorProfileInfo);
+router.get("/investor/ranked", auth_1.authenticateUser, investor_controller_1.InvestorController.getRankedInvestors);
+router.get("/investor/:user_id/feed", investor_controller_1.InvestorController.getInvestorInterestCampaigns);
+router.get("/investor/:userId/monthly", investor_controller_1.InvestorController.getMonthlyInvestments);
+router.get("/campaign-investments/:userId", investor_controller_1.InvestorController.getInvestorCampaignInvestments);
+exports.default = router;
