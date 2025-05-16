@@ -24,6 +24,12 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 const app = express();
+app.options("*", cors({
+origin: "https://nice-grass-01a8bd000.6.azurestaticapps.net",
+credentials: true,
+methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+allowedHeaders: ["Content-Type", "Authorization"],
+}));
 app.use(
   cors({
     origin: "https://nice-grass-01a8bd000.6.azurestaticapps.net",
@@ -33,12 +39,6 @@ app.use(
   })
 );
 
-app.options("*", cors({
-origin: "https://nice-grass-01a8bd000.6.azurestaticapps.net",
-credentials: true,
-methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-allowedHeaders: ["Content-Type", "Authorization"],
-}));
 
 app.use(express.json());
 app.use(cookieParser());
