@@ -16,6 +16,7 @@ import { authenticateUser } from './middleware/auth';
 import chatRoutes from './routes/chat.routes';
 import { initSocket } from './socket/socket';
 import searchRoutes from './routes/search.routes';
+import notifyRoutes from './routes/notification.routes'
 
 
 dotenv.config();
@@ -43,7 +44,7 @@ AppDataSource.initialize()
     initSocket(server);
 
     app.use(cors({
-      origin: "https://nice-grass-01a8bd000.6.azurestaticapps.net/", 
+      origin: "https://nice-grass-01a8bd000.6.azurestaticapps.net", 
       credentials : true
     }));
 
@@ -60,7 +61,8 @@ AppDataSource.initialize()
 
    app.use(cookieParser());
     // Register routes
-    app.use('/api', searchRoutes)
+    app.use('/api/noitfy',notifyRoutes);
+    app.use('/api', searchRoutes);
     app.use("/api/chat", chatRoutes);
     app.use('/api/investment', investmentroutes); 
     app.use('/uploads', express.static(path.join(__dirname, '../uploads')));

@@ -2,11 +2,12 @@
 import { Server } from "socket.io";
 import { ChatService } from "../services/chat.service";
 
+let io: Server;
 
 export function initSocket(server: any) {
-  const io = new Server(server, {
+  io = new Server(server, {
     cors: {
-      origin:'https://nice-grass-01a8bd000.6.azurestaticapps.net',
+      origin:'*',
       credentials: true,
       methods: ["GET" , "POST"]
     }
@@ -61,4 +62,9 @@ export function initSocket(server: any) {
 
   });
 });
-}
+};
+
+export const getIO = () => {
+  if (!io) throw new Error("Socket.io not initialized");
+  return io;
+};

@@ -3,6 +3,7 @@ import { Campaign } from "../entities/campaign.entity";
 import { User } from "../entities/user";
 import axios from "axios";
 import { Innovator } from "../entities/innovator.entity";
+import { MailService } from '../services//email.service';
 
 export const createCampaignService = async (
   user_id: number,
@@ -100,6 +101,7 @@ export const createCampaignService = async (
     }
 
     // 6. Return saved campaign (with final status)
+    
     return { savedCampaign, count: innovator ? innovator.campaigns_count : 0 };
   } catch (error) {
     console.error("Service Error creating campaign:", (error as Error).message);
