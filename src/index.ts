@@ -24,54 +24,54 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 const app = express();
+app.use(
+  cors({
+    origin: "https://nice-grass-01a8bd000.6.azurestaticapps.net",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+app.options("*", cors({
+origin: "https://nice-grass-01a8bd000.6.azurestaticapps.net",
+credentials: true,
+methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+allowedHeaders: ["Content-Type", "Authorization"],
+}));
+
+app.use(express.json());
+app.use(cookieParser());
+
+app.get(
+  "/api/me",
+  authenticateUser,
+  (req: express.Request, res: express.Response) => {
+    if ((req as any).user) {
+      res.status(200).json((req as any).user); // Ensure req.user is properly cast
+    } else {
+      res.status(401).json({ message: "Unauthorized" });
+    }
+  }
+);
+
+// Register routes
+app.use("/api/noitfy", notifyRoutes);
+app.use("/api", searchRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/investment", investmentroutes);
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+app.use("/api", innovatorRoutes);
+app.use("/api", investorRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/campaigns", campaignRoutes);
+app.use("/api", Likeroutes);
 
 AppDataSource.initialize()
-  .then(() => {
-    console.log("Data Source has been initialized!");
+.then(() => {
+  console.log("Data Source has been initialized!");
 
-    app.use(
-      cors({
-        origin: "https://nice-grass-01a8bd000.6.azurestaticapps.net",
-        credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-      })
-    );
-
-    app.options("*", cors({
-  origin: "https://nice-grass-01a8bd000.6.azurestaticapps.net",
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-}));
-    // Middleware to parse JSON bodies
-    app.use(express.json());
-    app.use(cookieParser());
-    
-    app.get(
-      "/api/me",
-      authenticateUser,
-      (req: express.Request, res: express.Response) => {
-        if ((req as any).user) {
-          res.status(200).json((req as any).user); // Ensure req.user is properly cast
-        } else {
-          res.status(401).json({ message: "Unauthorized" });
-        }
-      }
-    );
-
-    // Register routes
-    app.use("/api/noitfy", notifyRoutes);
-    app.use("/api", searchRoutes);
-    app.use("/api/chat", chatRoutes);
-    app.use("/api/investment", investmentroutes);
-    app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
-    app.use("/api", innovatorRoutes);
-    app.use("/api", investorRoutes);
-    app.use("/api/auth", authRoutes);
-    app.use("/api/campaigns", campaignRoutes);
-    app.use("/api", Likeroutes);
-    // Start the server
+  
     const server = app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
