@@ -56,16 +56,27 @@ app.get(
 );
 
 // Register routes
-app.use("/api/noitfy", notifyRoutes);
-app.use("/api", searchRoutes);
+// Fix: Typo in 'noitfy' → 'notify'
+app.use("/api/notify", notifyRoutes);
+
+// Specify distinct paths for each module to avoid ambiguous overlaps
+app.use("/api/search", searchRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/investment", investmentroutes);
+
+// Serve static uploads from '/uploads'
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
-app.use("/api", innovatorRoutes);
-app.use("/api", investorRoutes);
+
+// Separate paths for innovator and investor routes to avoid overlapping '/api'
+app.use("/api/innovators", innovatorRoutes);
+app.use("/api/investors", investorRoutes);
+
 app.use("/api/auth", authRoutes);
 app.use("/api/campaigns", campaignRoutes);
-app.use("/api", Likeroutes);
+
+// Assign a proper path for likes (was using ambiguous '/api')
+app.use("/api/likes", Likeroutes);
+
 
 AppDataSource.initialize()
 .then(() => {
