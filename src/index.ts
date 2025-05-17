@@ -45,32 +45,52 @@ app.use(cookieParser());
 
 
 
-// Register routes
-// Fix: Typo in 'noitfy' → 'notify'
-app.use("/api/notify", notifyRoutes);
+// // Register routes
+// // Fix: Typo in 'noitfy' → 'notify'
+// app.use("/api/notify", notifyRoutes);
 
-// Specify distinct paths for each module to avoid ambiguous overlaps
-app.use("/api/search", searchRoutes);
-app.use("/api/chat", chatRoutes);
-app.use("/api/investment", investmentroutes);
+// // Specify distinct paths for each module to avoid ambiguous overlaps
+// app.use("/api/search", searchRoutes);
+// app.use("/api/chat", chatRoutes);
+// app.use("/api/investment", investmentroutes);
 
-// Serve static uploads from '/uploads'
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+// // Serve static uploads from '/uploads'
+// app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-// Separate paths for innovator and investor routes to avoid overlapping '/api'
-app.use("/api/innovators", innovatorRoutes);
-app.use("/api/investors", investorRoutes);
+// // Separate paths for innovator and investor routes to avoid overlapping '/api'
+// app.use("/api/innovators", innovatorRoutes);
+// app.use("/api/investors", investorRoutes);
 
-app.use("/api/auth", authRoutes);
-app.use("/api/campaigns", campaignRoutes);
+// app.use("/api/auth", authRoutes);
+// app.use("/api/campaigns", campaignRoutes);
 
-// Assign a proper path for likes (was using ambiguous '/api')
-app.use("/api/likes", Likeroutes);
+// // Assign a proper path for likes (was using ambiguous '/api')
+// app.use("/api/likes", Likeroutes);
 
 
 AppDataSource.initialize()
 .then(() => {
   console.log("Data Source has been initialized!");
+
+  app.use("/api/notify", notifyRoutes);
+
+  // Specify distinct paths for each module to avoid ambiguous overlaps
+  app.use("/api/search", searchRoutes);
+  app.use("/api/chat", chatRoutes);
+  app.use("/api/investment", investmentroutes);
+
+  // Serve static uploads from '/uploads'
+  app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
+  // Separate paths for innovator and investor routes to avoid overlapping '/api'
+  app.use("/api/innovators", innovatorRoutes);
+  app.use("/api/investors", investorRoutes);
+
+  app.use("/api/auth", authRoutes);
+  app.use("/api/campaigns", campaignRoutes);
+
+  // Assign a proper path for likes (was using ambiguous '/api')
+  app.use("/api/likes", Likeroutes);
 
   
     const server = app.listen(PORT, () => {
