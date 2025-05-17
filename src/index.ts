@@ -43,17 +43,7 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-app.get(
-  "/api/me",
-  authenticateUser,
-  (req: express.Request, res: express.Response) => {
-    if ((req as any).user) {
-      res.status(200).json((req as any).user); // Ensure req.user is properly cast
-    } else {
-      res.status(401).json({ message: "Unauthorized" });
-    }
-  }
-);
+
 
 // Register routes
 // Fix: Typo in 'noitfy' → 'notify'
