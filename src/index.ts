@@ -24,13 +24,8 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 const app = express();
-app.options("*", cors({
-origin: "https://nice-grass-01a8bd000.6.azurestaticapps.net",
-credentials: true,
-methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-allowedHeaders: ["Content-Type", "Authorization"],
-}));
-app.use(
+app.options(
+  "*",
   cors({
     origin: "https://nice-grass-01a8bd000.6.azurestaticapps.net",
     credentials: true,
@@ -39,60 +34,34 @@ app.use(
   })
 );
 
-
 app.use(express.json());
 app.use(cookieParser());
 
 
-
-// // Register routes
-// // Fix: Typo in 'noitfy' → 'notify'
-// app.use("/api/notify", notifyRoutes);
-
-// // Specify distinct paths for each module to avoid ambiguous overlaps
-// app.use("/api/search", searchRoutes);
-// app.use("/api/chat", chatRoutes);
-// app.use("/api/investment", investmentroutes);
-
-// // Serve static uploads from '/uploads'
-// app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
-
-// // Separate paths for innovator and investor routes to avoid overlapping '/api'
-// app.use("/api/innovators", innovatorRoutes);
-// app.use("/api/investors", investorRoutes);
-
-// app.use("/api/auth", authRoutes);
-// app.use("/api/campaigns", campaignRoutes);
-
-// // Assign a proper path for likes (was using ambiguous '/api')
-// app.use("/api/likes", Likeroutes);
-
-
 AppDataSource.initialize()
-.then(() => {
-  console.log("Data Source has been initialized!");
+  .then(() => {
+    console.log("Data Source has been initialized!");
 
-  app.use("/api/notify", notifyRoutes);
+    app.use("/api/notify", notifyRoutes);
 
-  // Specify distinct paths for each module to avoid ambiguous overlaps
-  app.use("/api/search", searchRoutes);
-  app.use("/api/chat", chatRoutes);
-  app.use("/api/investment", investmentroutes);
+    // Specify distinct paths for each module to avoid ambiguous overlaps
+    app.use("/api/search", searchRoutes);
+    app.use("/api/chat", chatRoutes);
+    app.use("/api/investment", investmentroutes);
 
-  // Serve static uploads from '/uploads'
-  app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+    // Serve static uploads from '/uploads'
+    app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-  // Separate paths for innovator and investor routes to avoid overlapping '/api'
-  app.use("/api/innovators", innovatorRoutes);
-  app.use("/api/investors", investorRoutes);
+    // Separate paths for innovator and investor routes to avoid overlapping '/api'
+    app.use("/api/innovators", innovatorRoutes);
+    app.use("/api/investors", investorRoutes);
 
-  app.use("/api/auth", authRoutes);
-  app.use("/api/campaigns", campaignRoutes);
+    app.use("/api/auth", authRoutes);
+    app.use("/api/campaigns", campaignRoutes);
 
-  // Assign a proper path for likes (was using ambiguous '/api')
-  app.use("/api/likes", Likeroutes);
+    // Assign a proper path for likes (was using ambiguous '/api')
+    app.use("/api/likes", Likeroutes);
 
-  
     const server = app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
